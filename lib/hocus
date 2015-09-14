@@ -1,0 +1,15 @@
+#! /usr/bin/env node
+
+var program = require('commander');
+
+var path = require('path');
+var gitConfig = require('git-config');
+
+program
+	.version('0.0.1')
+	.command('configure', 'configure your AWS access and settings')
+	.parse(process.argv);
+
+if (!process.argv.slice(2).length) {
+	program.outputHelp();
+}

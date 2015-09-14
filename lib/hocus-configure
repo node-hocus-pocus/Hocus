@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+var program = require('commander');
+var prompt = require('prompt');
+var colors = require('colors');
+var fs = require('fs');
+var mkdirp = require('mkdirp');
+var osenv = require('osenv');
+var path = require('path')
+
+var userHome = osenv.home();
+var credentialsFile = userHome + '/.hocus/credentials.json';
+
+program
+	.description('configure your AWS access and settings')
+	.option('-a, --aws <path>', 'configure from existing AWS CLI file')
+	.option('-f, --file <path>', 'store the configuration at the path')
+	.parse(process.argv);
+
+if (program.aws){
+	console.log(program.file);
+} else {
+
+    var credentials = {};
+    var schema = {
+        properties : {
+            'profile' : {
+                require : true,
+                default : 'dev',
+                description : 'Credential Profile Name:'.cyan
+            },
+            'awsAccessKey' : {
+                required : true,
+                pattern : /^[a-zA-Z0-9]{20}$/, // 20 alphanumeric characters
+                description: 'AWS Access Key ID:'.cyan,
+                message: 'That does not seem to be a valid AWS Access Key.'
+            },
+            'awsSecretAccessKey' : {
+                required : true,
+                pattern : /^[a-zA-Z0-9/+=]{40}$/, // 40 base64 characters
+                description: 'AWS Secret Access Key:'.cyan,
+                message: 'That does not seem to be a valid AWS Secret Access Key.'
+            },
+            'regionName' :{
+                default : 'us-east-1',
+                description: 'Default Region Name:'.cyan,
+                message : 'Must be one of us-east-1, us-west-2, or eu-west-1. Default is us-east-1.',
+                conform : function( value ){
+                    var validRegions = [
+                        'us-east-1',
+                        'us-west-2',
+                        'eu-west-1'
+                    ];
+                    return (validRegions.indexOf(value) > -1);
+                }
+            }
+        }
+    }
+
+    prompt.message = '';
+    prompt.delimiter = '';
+    prompt.start();
+    prompt.get(schema, function(err, result){
+    	if ( err ) throw err;
+
+    	var fullFilePath = (program.file) ? program.file : credentialsFile;
+    	var directory = path.dirname(fullFilePath)
+
+       	mkdirp.sync(directory);
+
+		var credentials = {
+			profiles: {}
+		};
+
+		if (fs.existsSync(fullFilePath)) {
+			credentials = JSON.parse(fs.readFileSync(fullFilePath));
+		} 
+		var profile = result.profile;
+		delete result.profile;
+
+		credentials.profiles[profile] = result;
+
+		fs.writeFileSync(fullFilePath, JSON.stringify(credentials, null, 4));
+		console.log('Hocus configuration complete.'.green);
+		process.exit(0);
+    });
+}
