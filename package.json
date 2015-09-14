@@ -1,0 +1,26 @@
+{
+  "name": "hocus",
+  "version": "0.0.1",
+  "description": "A command line tool to publish a Node.js Express app to the AWS API Gateway.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/node-hocus-pocus/hocus.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "aws",
+    "api",
+    "gateway"
+  ],
+  "author": "John Titus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/node-hocus-pocus/hocus/issues"
+  },
+  "homepage": "https://github.com/node-hocus-pocus/hocus"
+}
