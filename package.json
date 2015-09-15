@@ -4,7 +4,7 @@
   "description": "A command line tool to publish a Node.js Express app to the AWS API Gateway.",
   "preferGlobal": true,
   "bin": {
-    "hocus": "lib/hocus"
+    "hocus": "cli/hocus"
   },
   "scripts": {
     "test": "mocha -R spec"
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/node-hocus-pocus/hocus",
   "dependencies": {
+    "bluebird": "^2.10.0",
     "colors": "^1.1.2",
     "commander": "^2.8.1",
     "fs-extra": "^0.24.0",
