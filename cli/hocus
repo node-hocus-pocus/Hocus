@@ -3,7 +3,6 @@
 var program = require('commander');
 
 var path = require('path');
-var gitConfig = require('git-config');
 
 program
 	.version('0.0.1')
