@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var prompt = require('prompt');
+var colors = require('colors');
+var fs = require('fs');
+var mkdirp = require('mkdirp');
+var osenv = require('osenv');
+var path = require('path');
+
+
+var init = require('../actions/init');
+
+var userHome = osenv.home();
+var credentialsFile = userHome + '/.hocus/credentials.json';
+
+program
+	.description('initialize hocus inside of an app folder')
+	.parse(process.argv);
+
+init()
+	.then(function() {
+		console.log('Hocus initialized.'.green);
+		process.exit(0);
+	})
+	.catch(function(e){
+		console.log(e.message.red);
+		process.exit(1);
+	})

@@ -8,6 +8,7 @@ var gitConfig = require('git-config');
 program
 	.version('0.0.1')
 	.command('configure', 'configure your AWS access and settings')
+	.command('init', 'initialize hocus inside of an app folder')
 	.parse(process.argv);
 
 if (!process.argv.slice(2).length) {

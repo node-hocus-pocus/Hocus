@@ -3,11 +3,12 @@ A command line tool to publish a Node.js Express app to the AWS API Gateway.
 
 ## Commands
 ### configure
-Create profiles to use when Hocus deploys your app.  Stores in a file in `<userhome>/.hocus/credentials.json`.  
-Run  
 `hocus configure`
+Create your AWS credentials in profiles to use when Hocus deploys your app.  Stores in a file in `<userhome>/.hocus/credentials.json`.  
 
-Then, enter a profile name (defaults to `dev`), AWS Access Key, AWS Secret Access Key, and region name (default is `us-east-1`).
+### init
+`hocus init`
+Initialize Hocus for your Express application.  Run this in the same directory where your `package.json` is located.  Creates a `.hocus` file that will be used to store information about how to deploy your app.
 
 ## Testing
 Run

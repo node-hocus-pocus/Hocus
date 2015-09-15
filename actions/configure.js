@@ -1,43 +1,37 @@
 var Promise = require('bluebird');
 var path = require('path');
 var mkdirp = Promise.promisifyAll(require('mkdirp'));
-
-function existsAsync(path) {
-	return new Promise(function (resolve) {
-	    require('fs').exists(path, resolve);
-	});
-}
+var helpers = require('./helpers');
 
 var fs = Promise.promisifyAll(require("fs"));
 
-
-module.exports = function(fullFilePath, options){
+module.exports = function(fullFilePath, options) {
 	var directory = path.dirname(fullFilePath);
 
-   	return mkdirp
-   		.mkdirpAsync(directory)
-   		.then(function(){
-   			return existsAsync(fullFilePath)
-   		})
-   		.then(function(exists){
-   			if (exists){
-   				return fs
-                  .readFileAsync(fullFilePath)
-                  .then(function(contents){
-                     return JSON.parse(contents.toString('utf8'))
-                  });		
-   			} else {
-   				return {
+	return mkdirp
+		.mkdirpAsync(directory)
+		.then(function() {
+			return helpers.existsAsync(fullFilePath)
+		})
+		.then(function(exists) {
+			if (exists) {
+				return fs
+					.readFileAsync(fullFilePath)
+					.then(function(contents) {
+						return JSON.parse(contents.toString('utf8'))
+					});
+			} else {
+				return {
 					profiles: {}
 				};
-   			}
-   		})
-   		.then(function(credentials){
-   			//console.log(credentials);
-   			var profile = options.profile;
-			   delete options.profile;
+			}
+		})
+		.then(function(credentials) {
+			//console.log(credentials);
+			var profile = options.profile;
+			delete options.profile;
 
-			   credentials.profiles[profile] = options;
-			   return fs.writeFileAsync(fullFilePath, JSON.stringify(credentials, null, 4))
-   		});
+			credentials.profiles[profile] = options;
+			return fs.writeFileAsync(fullFilePath, JSON.stringify(credentials, null, 4))
+		});
 };
